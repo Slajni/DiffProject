@@ -5,13 +5,30 @@
 
 using namespace std;
 
-struct Difference
+
+
+class Line
 {
-    int startPos;
-    int endPos;
-    string firstFileVersion;
-    string secondFileVersion;
+    struct Difference
+    {
+        int startPos;
+        int endPos;
+        string firstFileVersion;
+        string secondFileVersion;
+    };
+
+    string line;
+    vector <Difference> differences;
+
+public:
+
+    Line(string _line)
+    {
+        line = _line;
+    }
+
 };
+
 
 int parameterChecker(int argc, char ** argv) // check if parameters were passed correctly
 {
