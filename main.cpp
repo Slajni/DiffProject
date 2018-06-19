@@ -5,8 +5,6 @@
 
 using namespace std;
 
-
-
 class Line
 {
     struct Difference
@@ -17,14 +15,27 @@ class Line
         string secondFileVersion;
     };
 
-    string line;
+    string line1;
+    string line2;
     vector <Difference> differences;
+    bool different = 0;
 
 public:
 
-    Line(string _line)
+    Line(const string & _line1, const string & _line2)
     {
-        line = _line;
+        line1 = _line1;
+        line2 = _line2;
+    }
+
+    void findDifferences()
+    {
+        if(line1 == line2)
+            return;
+        else
+        {
+
+        }
     }
 
 };
