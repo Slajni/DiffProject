@@ -30,8 +30,20 @@ int parameterChecker(int argc, char ** argv) // check if parameters were passed 
     }
 }
 
+inline int openFiles(char ** argv, ifstream & File1, ifstream & File2)
+{
+    File1.open(argv[1]);
+    File2.open(argv[2]);
+    if(File1 && File2) // file have been sucessfully opened
+        return 1; // 1 - opened
+    return 0; // failed to open
+}
+
 int main(int argc, char ** argv)
 {
     cout << parameterChecker(argc, argv);
+    ifstream firstFile, secondFile;
+    openFiles(argv, firstFile, secondFile);
+
     return 0;
 }
