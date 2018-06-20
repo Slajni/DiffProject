@@ -249,7 +249,9 @@ int main(int argc, char ** argv)
     if(parameterChecker(argc,argv))
     {
         ifstream firstFile, secondFile;
-        openFiles(argv, firstFile, secondFile);
+
+        if(!openFiles(argv, firstFile, secondFile))
+            return -1;
 
         string firstFileLine;
         string secondFileLine;
