@@ -59,8 +59,6 @@ public:
             if(line1.length() == line2.length()) // if lines are of the same size
             {
 
-
-
                 for(int i = 0; i < line1.length(); i++)
                 {
                     if(line1[i]!=line2[i] && startPos == -1) // if it's new difference
@@ -96,7 +94,7 @@ public:
                 string longerLine;
                 string shorterLine;
                 bool firstLonger = 0;
-                if(line1.length() > line2.length())
+                if(line1.length() > line2.length()) // looking for longer line
                 {
                     longerLine = line1;
                     shorterLine = line2;
@@ -111,22 +109,61 @@ public:
                 if(shorterLine == longerLine.substr(0,shorterLine.length())) // if the lines are the same only one of them has something added at the end
                 {
                     differenceString1 = longerLine.substr(shorterLine.length(),longerLine.length()-shorterLine.length()); // catch the added value to the longer line
-                    startPos = shorterLine.length()-1;
-                    endPos = longerLine.length()-1;
+                    startPos = shorterLine.length();
+                    endPos = longerLine.length();
                     if(firstLonger == 1)
                         this->differences.emplace_back(startPos, endPos, differenceString1, "");
                     else
                         this->differences.emplace_back(startPos, endPos, "", differenceString1);
                 }
                 else
-                {}
+                {
+                    for(int i = 0; i < shorterLine.length(); i++)
+                    {
+                        if(line1[i]!=line2[i] && startPos == -1) // if it's new difference
+                        {
+                            startPos = i;
+                            differenceString1 += line1[i];
+                            differenceString2 += line2[i];
+                        }
+                        else if(line1[i]!=line2[i] && startPos != -1) // still the same difference, so only updating difference strings
+                        {
+                            differenceString1 += line1[i];
+                            differenceString2 += line2[i];
+                        }
+                        else if (line1[i] == line2[i] && startPos != -1) // end of the difference
+                        {
+                            endPos = i-1;
+                            this->differences.emplace_back(startPos, endPos, differenceString1, differenceString2);
+                            startPos = -1;
+                            endPos = -1;
+                            differenceString1 = "";
+                            differenceString2 = "";
+                        }
+                    }
+                    if(endPos == -1 && startPos != -1) // if line ended and last difference is still not complete, then the end of the longer word is the end of the line
+                    {
+                        endPos = (int)longerLine.length()-1;
+                        this->differences.emplace_back(startPos, endPos, differenceString1, differenceString2);
+                    }
+                    else
+                    {
+                        differenceString1 = longerLine.substr(shorterLine.length(),longerLine.length()-shorterLine.length()); // catch the added value to the longer line
+                        startPos = shorterLine.length()-1;
+                        endPos = longerLine.length()-1;
+                        if(firstLonger == 1)
+                            this->differences.emplace_back(startPos, endPos, differenceString1, "");
+                        else
+                            this->differences.emplace_back(startPos, endPos, "", differenceString1);
+                    }
+                }
 
                 differentLines.push_back(*this);
             }
         }
     }
 
-    void printDifferences()
+    void printDifferences() const
     {
         for(auto const & value : differences)
         {
@@ -136,10 +173,10 @@ public:
 };
 
 
-int parameterChecker(int argc, char ** argv) // check if parameters were passed correctly
+bool parameterChecker(int argc, char ** argv) // check if parameters were passed correctly
 {
     if(argc != 3)
-        return 0;
+        return false;
     string str1(argv[1]);
     string str2(argv[2]);
     if(str1.length()>=5 && str1.length()>=5)
@@ -148,8 +185,8 @@ int parameterChecker(int argc, char ** argv) // check if parameters were passed 
         str2 = str2.substr(str2.length() - 4, 4);
 
         if(str1 == ".txt" && str2 == ".txt")
-            return 1;
-        return 0;
+            return true;
+        return false;
     }
 }
 
@@ -164,13 +201,18 @@ inline int openFiles(char ** argv, ifstream & File1, ifstream & File2)
 
 int main(int argc, char ** argv)
 {
-    ifstream firstFile, secondFile;
-    openFiles(argv, firstFile, secondFile);
+    if(parameterChecker(argc,argv))
+    {
+        ifstream firstFile, secondFile;
+        openFiles(argv, firstFile, secondFile);
 
-
-    Line *testLine = new Line("ABCDEFG", "ABCDEFGHI", 1);
-    testLine->findDifferences();
-    differentLines[0].printDifferences();
+    /*
+        Line *testLine = new Line("", "ABDCEFGHI", 1);
+        testLine->findDifferences();
+        for (auto const &value : differentLines)
+            value.printDifferences();
+    */
+    }
 
 
 
