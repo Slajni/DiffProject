@@ -10,6 +10,12 @@ class Difference;
 
 vector <Line> differentLines;
 
+void help()
+{
+    cout << "To run program properly use it name followed by two parameters being names of the files to compare with .txt extenstions \n Example: DiffProject file1.txt file2.txt";
+}
+
+
 class Difference
 {
 public:
@@ -321,12 +327,8 @@ int main(int argc, char ** argv)
     else
     {
         cout << endl << "Wrong parameters";
-        //help();
+        help();
     }
-
-
-
-
 
     return 0;
 }
