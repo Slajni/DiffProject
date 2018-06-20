@@ -79,6 +79,8 @@ public:
                         thisLine->differences.emplace_back(startPos, endPos, differenceString1, differenceString2);
                         startPos = -1;
                         endPos = -1;
+                        differenceString1 = "";
+                        differenceString2 = "";
                     }
                 }
                 if(endPos == -1 && startPos != -1) // if line ended and last difference is still not complete, then the end of the difference is the end of the line
@@ -131,7 +133,6 @@ int main(int argc, char ** argv)
 {
     ifstream firstFile, secondFile;
     openFiles(argv, firstFile, secondFile);
-
 
     return 0;
 }
