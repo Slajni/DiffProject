@@ -34,14 +34,15 @@ class Line
     string line1;
     string line2;
     vector <Difference> differences;
-    bool different = 0;
+    int lineNumber;
 
 public:
 
-    Line(const string & _line1, const string & _line2)
+    Line(const string & _line1, const string & _line2, int lineNumber)
     {
         line1 = _line1;
         line2 = _line2;
+        this->lineNumber = lineNumber;
     }
 
     void findDifferences()
@@ -50,7 +51,6 @@ public:
             return;
         else
         {
-            Line *thisLine = new Line(line1, line2);
             string differenceString1 = "";
             string differenceString2 = "";
 
@@ -76,7 +76,7 @@ public:
                     else if (line1[i] == line2[i] && startPos != -1) // end of the difference
                     {
                         endPos = i-1;
-                        thisLine->differences.emplace_back(startPos, endPos, differenceString1, differenceString2);
+                        this->differences.emplace_back(startPos, endPos, differenceString1, differenceString2);
                         startPos = -1;
                         endPos = -1;
                         differenceString1 = "";
@@ -86,9 +86,9 @@ public:
                 if(endPos == -1 && startPos != -1) // if line ended and last difference is still not complete, then the end of the difference is the end of the line
                 {
                     endPos = (int)line1.length()-1;
-                    thisLine->differences.emplace_back(startPos, endPos, differenceString1, differenceString2);
+                    this->differences.emplace_back(startPos, endPos, differenceString1, differenceString2);
                 }
-                differentLines.push_back(*thisLine);
+                differentLines.push_back(*this);
             }
         }
         }
@@ -97,7 +97,7 @@ public:
     {
         for(auto const & value : differences)
         {
-            cout << endl << "In positions " << value.startPos << " - " << value.endPos << endl << "Version 1: " << value.firstFileVersion << endl << "Version 2: " << value.secondFileVersion << endl;
+            cout << endl << "In line: " << this->lineNumber <<  "  In positions " << value.startPos << " - " << value.endPos << endl << "Version 1: " << value.firstFileVersion << endl << "Version 2: " << value.secondFileVersion << endl;
         }
     }
 };
@@ -134,8 +134,8 @@ int main(int argc, char ** argv)
     ifstream firstFile, secondFile;
     openFiles(argv, firstFile, secondFile);
 
-    /*
-    Line *testLine = new Line("ABCDEFG", "ACBDEGF");
+/*
+    Line *testLine = new Line("ABCDEFG", "ACBDEGF", 1);
     testLine->findDifferences();
     differentLines[0].printDifferences();
 */
