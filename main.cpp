@@ -134,5 +134,11 @@ int main(int argc, char ** argv)
     ifstream firstFile, secondFile;
     openFiles(argv, firstFile, secondFile);
 
+    /*
+    Line *testLine = new Line("ABCDEFG", "ACBDEGF");
+    testLine->findDifferences();
+    differentLines[0].printDifferences();
+*/
+
     return 0;
 }
