@@ -34,10 +34,28 @@ public:
             return;
         else
         {
+            Line *thisLine = new Line(line1, line2);
+            string differenceString1 = "";
+            string differenceString2 = "";
 
+            if(line1.length() == line2.length())
+            {
+                int startPos = -1;
+                int endPos = -1;
+
+
+                for(int i = 0; i < line1.length(); i++)
+                {
+                    if(line1[i]!=line2[i] && startPos == -1)
+                    {
+                        startPos = i;
+                        differenceString1 += line1[i];
+                        differenceString2 += line2[i];
+                    }
+                }
+            }
         }
-    }
-
+        }
 };
 
 
