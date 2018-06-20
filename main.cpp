@@ -206,15 +206,56 @@ int main(int argc, char ** argv)
         ifstream firstFile, secondFile;
         openFiles(argv, firstFile, secondFile);
 
-    /*
-        Line *testLine = new Line("", "ABDCEFGHI", 1);
-        testLine->findDifferences();
-        for (auto const &value : differentLines)
-            value.printDifferences();
-    */
+        string firstFileLine;
+        string secondFileLine;
+        int curline = 0;
+        Line * lineToCheck;
+
+        while (true)
+        {
+            getline(firstFile, firstFileLine);
+            getline(secondFile, secondFileLine);
+
+            if (firstFile.eof() && secondFile.eof())
+                break;
+
+            curline++;
+            if(firstFile.eof())
+            {
+                Line *lastLines = new Line("", secondFileLine, curline);
+                lastLines->findDifferences();
+                while(getline(secondFile,secondFileLine))
+                {
+                    delete lastLines;
+                    curline++;
+                    lastLines = new Line("", secondFileLine, curline);
+                    lastLines->findDifferences();
+                }
+                delete lastLines;
+            }
+            else if(secondFile.eof())
+            {
+                Line *lastLines = new Line(firstFileLine,"", curline);
+                lastLines->findDifferences();
+                while(getline(firstFile,firstFileLine))
+                {
+                    delete lastLines;
+                    curline++;
+                    lastLines = new Line(firstFileLine,"", curline);
+                    lastLines->findDifferences();
+                }
+                delete lastLines;
+            }
+            lineToCheck = new Line(firstFileLine, secondFileLine, curline);
+            lineToCheck->findDifferences();
+            delete lineToCheck;
+
+        }
+
     }
 
-
+        for (auto const &value : differentLines)
+            value.printDifferences();
 
     return 0;
 }
