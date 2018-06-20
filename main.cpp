@@ -53,11 +53,12 @@ public:
         {
             string differenceString1 = "";
             string differenceString2 = "";
+            int startPos = -1;
+            int endPos = -1;
 
             if(line1.length() == line2.length()) // if lines are of the same size
             {
-                int startPos = -1;
-                int endPos = -1;
+
 
 
                 for(int i = 0; i < line1.length(); i++)
@@ -90,8 +91,40 @@ public:
                 }
                 differentLines.push_back(*this);
             }
+            else if(line1.length()!=line2.length()) // if lines are not the same size
+            {
+                string longerLine;
+                string shorterLine;
+                bool firstLonger = 0;
+                if(line1.length() > line2.length())
+                {
+                    longerLine = line1;
+                    shorterLine = line2;
+                    firstLonger = 1;
+                }
+                else
+                {
+                    longerLine = line2;
+                    shorterLine = line1;
+                }
+
+                if(shorterLine == longerLine.substr(0,shorterLine.length())) // if the lines are the same only one of them has something added at the end
+                {
+                    differenceString1 = longerLine.substr(shorterLine.length(),longerLine.length()-shorterLine.length()); // catch the added value to the longer line
+                    startPos = shorterLine.length()-1;
+                    endPos = longerLine.length()-1;
+                    if(firstLonger == 1)
+                        this->differences.emplace_back(startPos, endPos, differenceString1, "");
+                    else
+                        this->differences.emplace_back(startPos, endPos, "", differenceString1);
+                }
+                else
+                {}
+
+                differentLines.push_back(*this);
+            }
         }
-        }
+    }
 
     void printDifferences()
     {
@@ -134,11 +167,12 @@ int main(int argc, char ** argv)
     ifstream firstFile, secondFile;
     openFiles(argv, firstFile, secondFile);
 
-/*
-    Line *testLine = new Line("ABCDEFG", "ACBDEGF", 1);
+
+    Line *testLine = new Line("ABCDEFG", "ABCDEFGHI", 1);
     testLine->findDifferences();
     differentLines[0].printDifferences();
-*/
+
+
 
     return 0;
 }
