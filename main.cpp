@@ -5,15 +5,27 @@
 
 using namespace std;
 
+class Difference
+{
+    int startPos;
+    int endPos;
+    string firstFileVersion;
+    string secondFileVersion;
+
+public:
+
+    Difference(int startPos, int endPos, const string & firstFileVersion, const string & secondFileVersion)
+    {
+        this->startPos = startPos;
+        this->endPos = endPos;
+        this->firstFileVersion = firstFileVersion;
+        this->secondFileVersion = secondFileVersion;
+    }
+
+};
+
 class Line
 {
-    struct Difference
-    {
-        int startPos;
-        int endPos;
-        string firstFileVersion;
-        string secondFileVersion;
-    };
 
     string line1;
     string line2;
