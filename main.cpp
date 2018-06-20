@@ -33,10 +33,11 @@ class Line
 
     string line1;
     string line2;
-    vector <Difference> differences;
-    int lineNumber;
 
 public:
+
+    int lineNumber;
+    vector <Difference> differences;
 
     Line(const string & _line1, const string & _line2, int lineNumber)
     {
@@ -170,6 +171,43 @@ public:
             cout << endl << "In line: " << this->lineNumber <<  "  In positions " << value.startPos << " - " << value.endPos << endl << "Version 1: " << value.firstFileVersion << endl << "Version 2: " << value.secondFileVersion << endl;
         }
     }
+    void printCurDifference(const Difference & value) const
+    {
+        cout << endl << "In line: " << this->lineNumber <<  "  In positions " << value.startPos << " - " << value.endPos << endl << "Version 1: " << value.firstFileVersion << endl << "Version 2: " << value.secondFileVersion << endl;
+    }
+    string chooseVersion() const
+    {
+        string result = "";
+        int choice = 0;
+        int base = 0;
+        int nextDifStartPos;
+
+        for (auto const &value: differences)
+        {
+            nextDifStartPos = value.startPos;
+            for (base; base < nextDifStartPos; base++)
+            {
+                result += this->line1[base];
+            }
+            printCurDifference(value);
+            cout << endl << "Choose 1 if you want to keep version from first file or any other value if you want to keep verion from 2nd one: " << endl;
+            cin >> choice;
+            if(choice == 1)
+            {
+                result += value.firstFileVersion;
+            }
+            else
+            {
+                result += value.secondFileVersion;
+            }
+            base = value.endPos + 1;
+        }
+        if(base < this->line1.length())
+            for(base; base < line1.length(); base++)
+                result += this->line1[base];
+
+        return result;
+    }
 };
 
 
@@ -198,6 +236,7 @@ inline int openFiles(char ** argv, ifstream & File1, ifstream & File2)
         return 1; // 1 - opened
     return 0; // failed to open
 }
+
 
 int main(int argc, char ** argv)
 {
@@ -248,14 +287,46 @@ int main(int argc, char ** argv)
             }
             lineToCheck = new Line(firstFileLine, secondFileLine, curline);
             lineToCheck->findDifferences();
+
             delete lineToCheck;
 
         }
 
+        firstFile.close();
+        secondFile.close();
+        firstFile.open(argv[1]);
+        ofstream resultFile;
+        resultFile.open("result.txt");
+
+        int nextline = -1; // used for loop as condition to iterate through non different lines
+        int base = 1; // --- || ---
+        string lineToPrint;
+        for (auto const &value: differentLines)
+        {
+            nextline = value.lineNumber;
+            for (base; base < nextline; base++)
+            {
+                getline(firstFile, lineToPrint);
+                resultFile << lineToPrint << endl;
+            }
+            base++;
+            getline(firstFile, lineToPrint);
+            lineToPrint = value.chooseVersion();
+            resultFile << lineToPrint << endl;
+        }
+
+        resultFile.close();
+        firstFile.close();
+    }
+    else
+    {
+        cout << endl << "Wrong parameters";
+        //help();
     }
 
-        for (auto const &value : differentLines)
-            value.printDifferences();
+
+
+
 
     return 0;
 }
