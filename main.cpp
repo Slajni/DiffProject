@@ -117,7 +117,7 @@ public:
                 {
                     differenceString1 = longerLine.substr(shorterLine.length(),longerLine.length()-shorterLine.length()); // catch the added value to the longer line
                     startPos = shorterLine.length();
-                    endPos = longerLine.length();
+                    endPos = longerLine.length()-1;
                     if(firstLonger == 1)
                         this->differences.emplace_back(startPos, endPos, differenceString1, "");
                     else
@@ -151,6 +151,15 @@ public:
                     if(endPos == -1 && startPos != -1) // if line ended and last difference is still not complete, then the end of the longer word is the end of the line
                     {
                         endPos = (int)longerLine.length()-1;
+                        if(firstLonger)
+                        {
+                            differenceString1 += longerLine.substr(shorterLine.length(),longerLine.length()-shorterLine.length());
+                        }
+                        else
+                        {
+                            differenceString2 += longerLine.substr(shorterLine.length(),longerLine.length()-shorterLine.length());
+                        }
+
                         this->differences.emplace_back(startPos, endPos, differenceString1, differenceString2);
                     }
                     else
@@ -170,13 +179,6 @@ public:
         }
     }
 
-    void printDifferences() const
-    {
-        for(auto const & value : differences)
-        {
-            cout << endl << "In line: " << this->lineNumber <<  "  In positions " << value.startPos << " - " << value.endPos << endl << "Version 1: " << value.firstFileVersion << endl << "Version 2: " << value.secondFileVersion << endl;
-        }
-    }
     void printCurDifference(const Difference & value) const
     {
         cout << endl << "In line: " << this->lineNumber <<  "  In positions " << value.startPos << " - " << value.endPos << endl << "Version 1: " << value.firstFileVersion << endl << "Version 2: " << value.secondFileVersion << endl;
