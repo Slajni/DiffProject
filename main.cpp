@@ -164,13 +164,13 @@ public:
                     }
                     else
                     {
-                        differenceString1 = longerLine.substr(shorterLine.length(),longerLine.length()-shorterLine.length()); // catch the added value to the longer line
+                        string differenceString = longerLine.substr(shorterLine.length(),longerLine.length()-shorterLine.length()); // catch the added value to the longer line
                         startPos = shorterLine.length();
                         endPos = longerLine.length()-1;
                         if(firstLonger == 1)
-                            this->differences.emplace_back(startPos, endPos, differenceString1, "");
+                            this->differences.emplace_back(startPos, endPos, differenceString, "");
                         else
-                            this->differences.emplace_back(startPos, endPos, "", differenceString1);
+                            this->differences.emplace_back(startPos, endPos, "", differenceString);
                     }
                 }
 
